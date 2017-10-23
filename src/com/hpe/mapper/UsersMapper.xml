@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hpe.mapper.UsersMapper">
+	<update id="updateUsers" parameterType="com.hpe.pojo.Users">
+		update users
+		<set>
+			<if test="uaccount!=null">uaccount=#{uaccount}</if>,
+			<if test="uname!=null">uname=#{uname}</if>,
+			<if test="ugender!=null">ugender=#{ugender}</if>,
+			<if test="uemail!=null">uemail=#{uemail}</if>,
+			<if test="utel!=null">utel=#{utel}</if>,
+			<if test="uintegral!=null">uintegral=#{uintegral}</if>,
+			uremarks=#{uremarks}
+		</set> where uid=#{uid}
+	</update>
+	<update id="forbiddenUsers">
+		update users
+		<set>
+			<if test="udelete!=null">udelete=#{udelete}</if>
+			
+		</set>where uid=#{uid}
+	</update>
+	<select id="getUsersById" parameterType="int" resultType="com.hpe.pojo.Users">
+		select * from users where uid=#{uid}
+	</select>
+	<select id="getUsersList" resultType="com.hpe.pojo.Users">
+		select * from users 
+	</select>
+	<select id="getUserPageList" parameterType="int" resultType="com.hpe.pojo.Users" >
+		select * from users limit #{curPage},5
+	</select>
+	<select id="getUserPageListBySearch"  resultType="com.hpe.pojo.Users" >
+		select * from users where concat(uaccount,uname,utel,ugender,uemail) like concat('%',#{search},'%') limit #{curPage},#{pageNumber}
+	</select>
+	<select id="getUsersCount" resultType="int">
+		select count(*) from users
+	</select>
+	<select id="getUsersCountBySearch" parameterType="java.lang.String" resultType="int">
+		select count(*) from users where concat(uaccount,uname,utel,ugender,uemail) like concat('%',#{search},'%')
+	</select>
+	
+</mapper>
